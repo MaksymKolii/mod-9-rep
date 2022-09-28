@@ -1,4 +1,4 @@
-const { join } = require("lodash");
+//const { join } = require("lodash");
 
 const initialData = [
   {
@@ -44,13 +44,13 @@ const initialData = [
 // 3
 localStorage.setItem('books', JSON.stringify(initialData));
 
-// 1 Задача в руте (корне) создать 2 Дива и дбавить им классы
+// 1) Задача в руте (корне) создать 2 Дива и дбавить им классы
 const leftDiv = document.createElement('div');
 const rightDiv = document.createElement('div');
 leftDiv.classList.add('left');
 rightDiv.classList.add('right');
 
-//2 добавляем в root Но сначала надо получить ссылку на родителя
+//2) добавляем в root Но сначала надо получить ссылку на родителя
 const rootDiv = document.querySelector('#root');
 rootDiv.append(leftDiv, rightDiv);
 
@@ -61,24 +61,41 @@ const addBtn = document.createElement('button');
 addBtn.textContent = 'ADD';
 leftDiv.append(title, list, addBtn);
 
-// 3 Для примера мы хотим работать не с initialData хранилищем, а записать данные в localStorage что потом можно было add, remowe edit их
+// 3) Для примера мы хотим работать не с initialData хранилищем, а записать данные в localStorage что потом можно было add, remowe edit их
 function renderBooksList() {
   const books = JSON.parse(localStorage.getItem('books'));
 
   const markup = books
-    .map(({ title }) => {
-      return `<li><p>${title}</p><button>Edit</button><button>Delete</button></li>`
+    .map(({ title, id }) => {
+      return `<li data-id ='${id}'><p class = "book-title">${title}</p><button>Edit</button><button>Delete</button></li>`
     })
     .join('');
 
-    // const markup = books
-    // .map(({ title }) => {
-    //   return `<li data-id=><p class='book-title'>${title}</p><button class='edit'>Edit</button><button class='delete'>Delete</button></li>`;
-    // })
-    // .join("")
-
   list.insertAdjacentHTML('afterbegin', markup);
+
+ //4 
+ const bookTitles =document.querySelectorAll('.book-title')
+ bookTitles.forEach((title) =>{
+title.addEventListener('click', renderPreview)
+ })
 }
 
 renderBooksList();
 
+function renderPreview(e) {
+
+  const books = JSON.parse(localStorage.getItem('books'));
+  const bookId = e.target.parentNode.dataset.id;
+  const book = books.find(({id}) => id ===bookId)
+  console.log(book);
+ 
+}
+
+// 4) при кликании на название книги на (р-шку) справа должна появляться развернутая информация
+// нужно создать слушателей для наших р -шек
+// чтоб удобно было обращаться к р-шке  вписываем ей класс class ="book-title" в шаблон 
+
+// 5) чтоб отображать превьюшку нужной книги нужно ее идентифицировать и мы добавляем датаАтрибут data-id =''
+// и через e.target ищем ее родителя (там где id) --  e.target.parentNode и датаАтрибут dataset.id
+
+// 6 в renderPreview нам нужно распарсить наш массив
