@@ -1,7 +1,8 @@
+const { join } = require("lodash");
 
 const initialData = [
   {
-    id: "1",
+    id: '1',
     title: `Apple. Эволюция компьютера`,
     author: `Владимир Невзоров`,
     img: `https://bukva.ua/img/products/449/449532_200.jpg`,
@@ -14,7 +15,7 @@ const initialData = [
     Она также может послужить источником вдохновения для дизайнеров, маркетологов и предпринимателей.`,
   },
   {
-    id: "2",
+    id: '2',
     title: `Как объяснить ребенку информатику`,
     author: `Кэрол Вордерман`,
     img: `https://bukva.ua/img/products/480/480030_200.jpg`,
@@ -27,7 +28,7 @@ const initialData = [
     объясняются наглядно с помощью иллюстраций и схем.`,
   },
   {
-    id: "3",
+    id: '3',
     title: `Путь скрам-мастера. #ScrumMasterWay`,
     author: `Зузана Шохова`,
     img: `https://bukva.ua/img/products/480/480090_200.jpg`,
@@ -39,3 +40,45 @@ const initialData = [
     какими инструментами ему нужно пользоваться.`,
   },
 ];
+
+// 3
+localStorage.setItem('books', JSON.stringify(initialData));
+
+// 1 Задача в руте (корне) создать 2 Дива и дбавить им классы
+const leftDiv = document.createElement('div');
+const rightDiv = document.createElement('div');
+leftDiv.classList.add('left');
+rightDiv.classList.add('right');
+
+//2 добавляем в root Но сначала надо получить ссылку на родителя
+const rootDiv = document.querySelector('#root');
+rootDiv.append(leftDiv, rightDiv);
+
+const title = document.createElement('h1');
+title.textContent = 'Library';
+const list = document.createElement('ul');
+const addBtn = document.createElement('button');
+addBtn.textContent = 'ADD';
+leftDiv.append(title, list, addBtn);
+
+// 3 Для примера мы хотим работать не с initialData хранилищем, а записать данные в localStorage что потом можно было add, remowe edit их
+function renderBooksList() {
+  const books = JSON.parse(localStorage.getItem('books'));
+
+  const markup = books
+    .map(({ title }) => {
+      return `<li><p>${title}</p><button>Edit</button><button>Delete</button></li>`
+    })
+    .join('');
+
+    // const markup = books
+    // .map(({ title }) => {
+    //   return `<li data-id=><p class='book-title'>${title}</p><button class='edit'>Edit</button><button class='delete'>Delete</button></li>`;
+    // })
+    // .join("")
+
+  list.insertAdjacentHTML('afterbegin', markup);
+}
+
+renderBooksList();
+
