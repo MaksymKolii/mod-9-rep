@@ -41,8 +41,10 @@ const initialData = [
   },
 ];
 
-// 3
+// Для примера мы хотим работать не с initialData хранилищем, а записать данные в localStorage что потом можно было add,remowe,edit их
 localStorage.setItem('books', JSON.stringify(initialData));
+
+const PARSED_LOCAL_STORAGE = JSON.parse(localStorage.getItem('books'));
 
 // 1) Задача в руте (корне) создать 2 Дива и дбавить им классы
 const leftDiv = document.createElement('div');
@@ -61,41 +63,51 @@ const addBtn = document.createElement('button');
 addBtn.textContent = 'ADD';
 leftDiv.append(title, list, addBtn);
 
-// 3) Для примера мы хотим работать не с initialData хранилищем, а записать данные в localStorage что потом можно было add, remowe edit их
+// 3) при кликании на название книги на (р-шку) справа должна появляться развернутая информация
+// нужно создать слушателей для наших р -шек
+// чтоб удобно было обращаться к р-шке  вписываем ей класс class ="book-title" в шаблон
+
 function renderBooksList() {
-  const books = JSON.parse(localStorage.getItem('books'));
-
-  const markup = books
-    .map(({ title, id }) => {
-      return `<li data-id ='${id}'><p class = "book-title">${title}</p><button>Edit</button><button>Delete</button></li>`
-    })
-    .join('');
-
+  // Фу парсит данные из локальнюхранилища, пробегается по ним map-ом, на основании каждого из объекта в массиве созд.разметку
+  // const books = JSON.parse(localStorage.getItem('books'));
+  const markup = PARSED_LOCAL_STORAGE.map(({ title, id }) => {
+    return `<li data-id ='${id}'><p class = "book-title">${title}</p><button>Edit</button><button>Delete</button></li>`;
+  }).join(''); // преобразуем в строку .join('');
+  // добавляем разметку в наш список (list - пустой тег ul, который мы заапендили выше)
   list.insertAdjacentHTML('afterbegin', markup);
 
- //4 
- const bookTitles =document.querySelectorAll('.book-title')
- bookTitles.forEach((title) =>{
-title.addEventListener('click', renderPreview)
- })
+  // получаем ссылки на все р-шки(названия книг) и добавляем каждой из них слушателя, обработчик события click и колбек фу renderPreview
+  const bookTitles = document.querySelectorAll('.book-title');
+  bookTitles.forEach(title => {
+    title.addEventListener('click', renderPreview);
+  });
 }
 
+// вызываем фу чтоб создался списочек книг
 renderBooksList();
 
-function renderPreview(e) {
+// 4) чтоб отображать превьюшку нужной книги нужно ее идентифицировать и мы добавляем датаАтрибут data-id =''
+// Через e.target ищем р-шку, потом ее родителя (там где id) --  e.target.parentNode
+// и у этой li-шки через датаАтрибут dataset.id считываем id  (e.target.parentNode.dataset.id)
 
-  const books = JSON.parse(localStorage.getItem('books'));
+// 5 в renderPreview нам нужно распарсить наш массив
+function renderPreview(e) {
+  // const books = JSON.parse(localStorage.getItem('books'));
   const bookId = e.target.parentNode.dataset.id;
-  const book = books.find(({id}) => id ===bookId)
-  console.log(book);
- 
+  // по полученному id-ку находим нашу книгу (с которой мы взаимодействуем кликая на p-шку в массиве
+  const book = PARSED_LOCAL_STORAGE.find(({ id }) => id === bookId);
+//созд перем markup в котор записыв результ вызова фу createPreviewMarkup ( с нашей найденной книгой - book)
+  const markup = createPreviewMarkup(book)
+  console.log(markup);
+  rightDiv.innerHTML = markup;
 }
 
-// 4) при кликании на название книги на (р-шку) справа должна появляться развернутая информация
-// нужно создать слушателей для наших р -шек
-// чтоб удобно было обращаться к р-шке  вписываем ей класс class ="book-title" в шаблон 
-
-// 5) чтоб отображать превьюшку нужной книги нужно ее идентифицировать и мы добавляем датаАтрибут data-id =''
-// и через e.target ищем ее родителя (там где id) --  e.target.parentNode и датаАтрибут dataset.id
-
-// 6 в renderPreview нам нужно распарсить наш массив
+// Фу принимает объект книги и возвращает разметку для Превьюшки
+function createPreviewMarkup({ title, author, img, plot }) {
+  return `<div>
+<h2>${title}</h2>
+<p>${author}</p>
+<img src ='${img}'/>
+<p>${plot}</p>
+</div>`;
+}
