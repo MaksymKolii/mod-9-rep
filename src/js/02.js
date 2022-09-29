@@ -41,13 +41,14 @@ const initialData = [
   },
 ];
 
-localStorage.setItem('books', JSON.stringify(initialData));
+// 1)Для примера мы хотим работать не с initialData хранилищем, а записать данные в localStorage что потом можно было add,remowe,edit их
+
 // При перезагрузки страницы наш скрипт читается сверху вниз и инициализируется заново, он доходит до 44 строки и перезаписывает и
-// все равно есть там что т о или нет, вся логика начинается с нуля
-// Для примера мы хотим работать не с initialData хранилищем, а записать данные в localStorage что потом можно было add,remowe,edit их
-
-
-
+// все равно есть там что т о или нет, вся логика начинается с нуля поэтому мы делаем проверку мы в localStorage не записываем если
+// он не пустой
+if (!localStorage.getItem('books')) {
+  localStorage.setItem('books', JSON.stringify(initialData));
+}
 
 // * let PARSED_LOCAL_STORAGE = JSON.parse(localStorage.getItem('books'));
 
@@ -73,13 +74,15 @@ leftDiv.append(title, list, addBtn);
 // чтоб удобно было обращаться к р-шке  вписываем ей класс class ="book-title" в шаблон
 
 function renderBooksList() {
-  const books = JSON.parse(localStorage.getItem('books'))
+  const books = JSON.parse(localStorage.getItem('books'));
   // Фу парсит данные из локальнюхранилища, пробегается по ним map-ом, на основании каждого из объекта в массиве созд.разметку
-  const markup = books.map(({ title, id }) => {
-    return `<li data-id ='${id}'><p class = "book-title">${title}</p><button>Edit</button><button class ="delete">Delete</button></li>`;
-  }).join(''); // преобразуем в строку .join('');
-// Сначала очищаем перед вставкой, чтоб не было задвоения
-  list.innerHTML =''
+  const markup = books
+    .map(({ title, id }) => {
+      return `<li data-id ='${id}'><p class = "book-title">${title}</p>< class ="edit">Edit</><button class ="delete">Delete</button></li>`;
+    })
+    .join(''); // преобразуем в строку .join('');
+  // Сначала очищаем перед вставкой, чтоб не было задвоения
+  list.innerHTML = '';
   // добавляем разметку в наш список (list - пустой тег ul, который мы заапендили выше)
   list.insertAdjacentHTML('afterbegin', markup);
   // получаем ссылки на все р-шки(названия книг) и добавляем каждой из них слушателя, обработчик события click и колбек фу renderPreview
@@ -87,10 +90,16 @@ function renderBooksList() {
   bookTitles.forEach(el => {
     el.addEventListener('click', renderPreview);
   });
-
+//8)
   const delBtns = document.querySelectorAll('.delete');
   delBtns.forEach(el => {
     el.addEventListener('click', deleteBook);
+  });
+
+  // 26) edit
+  const editBtns = document.querySelectorAll('.edit');
+  editBtns.forEach(el => {
+    el.addEventListener('click', editBook);
   });
 }
 
@@ -101,19 +110,19 @@ renderBooksList();
 // Через e.target ищем р-шку, потом ее родителя (там где id) --  e.target.parentNode
 // и у этой li-шки через датаАтрибут dataset.id считываем id  (e.target.parentNode.dataset.id)
 
-// 5 в renderPreview нам нужно распарсить наш массив
+// 5) в renderPreview нам нужно распарсить наш массив
 function renderPreview(e) {
-  const books = JSON.parse(localStorage.getItem('books'))
+  const books = JSON.parse(localStorage.getItem('books'));
   const bookId = e.target.parentNode.dataset.id;
   // по полученному id-ку находим нашу книгу (с которой мы взаимодействуем кликая на p-шку в массиве
   const book = books.find(({ id }) => id === bookId);
-//созд перем markup в котор записыв результ вызова фу createPreviewMarkup ( с нашей найденной книгой - book)
-  const markup = createPreviewMarkup(book)
+  // 7) созд перем markup в котор записыв результ вызова фу createPreviewMarkup ( с нашей найденной книгой - book)
+  const markup = createPreviewMarkup(book);
   console.log(markup);
   rightDiv.innerHTML = markup;
 }
 
-// Фу принимает объект книги и возвращает разметку для Превьюшки
+// 6) Фу принимает объект книги и возвращает разметку для Превьюшки
 function createPreviewMarkup({ title, author, img, plot }) {
   return `<div>
 <h2>${title}</h2>
@@ -123,28 +132,88 @@ function createPreviewMarkup({ title, author, img, plot }) {
 </div>`;
 }
 
-// function findById(e){
-//   const bookId = e.target.parentNode.dataset.id;
-//   // по полученному id-ку находим нашу книгу (с которой мы взаимодействуем кликая на p-шку в массиве
-//   return PARSED_LOCAL_STORAGE.find(({ id }) => id === bookId);
-// }
-// findById(e);
 
-// Чтоб реализовать delete Добавляем в размутку на кнопку class ="delete" и в той же Фу renderBooksList и добавляем 
+// 9)Чтоб реализовать delete Добавляем в размутку на кнопку class ="delete" и в той же Фу renderBooksList и добавляем
 // каждой из них слушателя, обработчик события click и колбек фу
 
-function deleteBook(e){
+function deleteBook(e) {
+  const books = JSON.parse(localStorage.getItem('books'));
+  const bookId = e.target.parentNode.dataset.id;
+  //10)чтоб удалить выбранный елемент мы используем метод который возвращает массив С (либо в нашем случае без) выбранным(и) элемен
+  const filteredArray = books.filter(({ id }) => id !== bookId);
 
-  const books = JSON.parse(localStorage.getItem('books'))
-const bookId = e.target.parentNode.dataset.id;
-//чтоб удалить выбранный елемент мы используем метод который возвращает массив С (либо в нашем случае без) выбранным(и) элемен
-const filteredArray = books.filter(({id}) => id!==bookId)
+  //11) Теперь нам надо Перезаписать localStorage чтоб обновить
+  localStorage.setItem('books', JSON.stringify(filteredArray));
+  //И вызвать фу renderBooksList которая заново созд.разметку
+  //* 12)важно-вызав этой фу к старой разметке добавляет новую => в фу renderBooksList надо добавить сначала очистку list.innerHTML =''
+  renderBooksList();
+}
 
+// 13)Mы хотим чтоб открывалась типа форма для заполнения полей для addBook, поэтому создаем фу которая будет
+// создавать разметку формы для заполнения
+addBtn.addEventListener('click', addBook);
+//14)
+function addBook() {
+  //19)
+  const newBook = { id: `${Date.now()}`, title: ``, author: ``, img: ``, plot: ``, };
+  //16)
+  const markup = createFormMarkup();
+  rightDiv.innerHTML = markup;
 
-// Теперь нам надо Перезаписать localStorage чтоб обновить
-localStorage.setItem('books', JSON.stringify(filteredArray));
-// И вызвать фу renderBooksList которая заново созд.разметку
+  // 21)Добавляем Фу fillObject
+  fillObject(newBook)
 
-// *важно-вызав этой фу к старой разметке добавляет новую => в фу renderBooksList надо добавить сначала очистку list.innerHTML =''
-renderBooksList()
+  //17)после того как разметка есть мы делаем ссылку на Форму
+  const form = document.querySelector('form');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    // 22) далее нам нужно запушить новый объект книги в localStorage для этого в JSON.parse(localStorage.getItem('books')); пушим объект
+    const books = JSON.parse(localStorage.getItem('books'));
+    books.push(newBook)
+    // 23) перезаписываем данные в localStorage
+    localStorage.setItem('books', JSON.stringify(books));
+    //24 перерисовываем разметку
+    renderBooksList();
+    //25 переиспользуем renderPreview создаем разметку на основании newBook и перерисовываем разметку
+    const markup = createPreviewMarkup(newBook);
+    console.log(markup);
+    rightDiv.innerHTML = markup;
+  });
+}
+// 15)
+function createFormMarkup({ title, author, img, plot }) {
+  return `<form>
+  <label>Name:<input type='text' name='title' value='${title}'/></label>
+  <label>Author:<input type='text' name='author' value='${author}'/></label>
+  <label>Image:<input type='text' name='img' value='${img}'/></label>
+  <label>Plot:<input type='text' name='plot' value='${plot}'/></label>
+  <button>Save</button>
+  </form>`;
+}
+
+// 18)создаем Фу внутри котор будет получать доступ к нашим инпутам и считывать значение value и записывать в св-ва нашего Объекта новой
+// книги !    19) Но где нам взять эту новую книгу? нам нужен какойто шаблончик Нью бука и этот шаблон создаем в Fu addBook 
+// и в этом объекте будут такиеже ключи как в наших объектах книги только пустые
+//* Также мы не можем позволить пользователям вводить id (т.к. мы не знаем что введут) поэтому id ьудем генерировать сами!!
+// поэтому в addBook() - id --- будет id: '${Date.now()}'
+//18)
+function fillObject(book) {
+  const inputs = document.querySelectorAll('input');
+  inputs.forEach(e => e.addEventListener('change', changeHandler));
+//20)
+  function changeHandler(e) {
+    //в буук с ключом ключом name записываем value с инпута
+    book[e.target.name] = e.target.value
+  }
+}
+
+//27) хотим чтоб при кликании кнопкиedit открывалась заполненная форма соответствующими полями
+function editBook(e){
+  const books = JSON.parse(localStorage.getItem('books'));
+  const bookId = e.target.parentNode.dataset.id;
+  // 28) по полученному id-ку находим нашу книгу (с которой мы взаимодействуем кликая на p-шку в массиве
+  const book = books.find(({ id }) => id === bookId);
+  // 29) нужно в нашу форму ( Фу createFormMarkup())) в инпут подставить value из localStorage
+  // для этого добавили в Фу function createFormMarkup({ title, author, img, plot } деструктуризацию и value =`${title}` и т.д. для всех
+  createFormMarkup(book)
 }
