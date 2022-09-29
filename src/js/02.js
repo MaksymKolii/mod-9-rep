@@ -41,10 +41,15 @@ const initialData = [
   },
 ];
 
-// Для примера мы хотим работать не с initialData хранилищем, а записать данные в localStorage что потом можно было add,remowe,edit их
 localStorage.setItem('books', JSON.stringify(initialData));
+// При перезагрузки страницы наш скрипт читается сверху вниз и инициализируется заново, он доходит до 44 строки и перезаписывает и
+// все равно есть там что т о или нет, вся логика начинается с нуля
+// Для примера мы хотим работать не с initialData хранилищем, а записать данные в localStorage что потом можно было add,remowe,edit их
 
-const PARSED_LOCAL_STORAGE = JSON.parse(localStorage.getItem('books'));
+
+
+
+// * let PARSED_LOCAL_STORAGE = JSON.parse(localStorage.getItem('books'));
 
 // 1) Задача в руте (корне) создать 2 Дива и дбавить им классы
 const leftDiv = document.createElement('div');
@@ -68,18 +73,24 @@ leftDiv.append(title, list, addBtn);
 // чтоб удобно было обращаться к р-шке  вписываем ей класс class ="book-title" в шаблон
 
 function renderBooksList() {
+  const books = JSON.parse(localStorage.getItem('books'))
   // Фу парсит данные из локальнюхранилища, пробегается по ним map-ом, на основании каждого из объекта в массиве созд.разметку
-  // const books = JSON.parse(localStorage.getItem('books'));
-  const markup = PARSED_LOCAL_STORAGE.map(({ title, id }) => {
-    return `<li data-id ='${id}'><p class = "book-title">${title}</p><button>Edit</button><button>Delete</button></li>`;
+  const markup = books.map(({ title, id }) => {
+    return `<li data-id ='${id}'><p class = "book-title">${title}</p><button>Edit</button><button class ="delete">Delete</button></li>`;
   }).join(''); // преобразуем в строку .join('');
+// Сначала очищаем перед вставкой, чтоб не было задвоения
+  list.innerHTML =''
   // добавляем разметку в наш список (list - пустой тег ul, который мы заапендили выше)
   list.insertAdjacentHTML('afterbegin', markup);
-
   // получаем ссылки на все р-шки(названия книг) и добавляем каждой из них слушателя, обработчик события click и колбек фу renderPreview
   const bookTitles = document.querySelectorAll('.book-title');
-  bookTitles.forEach(title => {
-    title.addEventListener('click', renderPreview);
+  bookTitles.forEach(el => {
+    el.addEventListener('click', renderPreview);
+  });
+
+  const delBtns = document.querySelectorAll('.delete');
+  delBtns.forEach(el => {
+    el.addEventListener('click', deleteBook);
   });
 }
 
@@ -92,10 +103,10 @@ renderBooksList();
 
 // 5 в renderPreview нам нужно распарсить наш массив
 function renderPreview(e) {
-  // const books = JSON.parse(localStorage.getItem('books'));
+  const books = JSON.parse(localStorage.getItem('books'))
   const bookId = e.target.parentNode.dataset.id;
   // по полученному id-ку находим нашу книгу (с которой мы взаимодействуем кликая на p-шку в массиве
-  const book = PARSED_LOCAL_STORAGE.find(({ id }) => id === bookId);
+  const book = books.find(({ id }) => id === bookId);
 //созд перем markup в котор записыв результ вызова фу createPreviewMarkup ( с нашей найденной книгой - book)
   const markup = createPreviewMarkup(book)
   console.log(markup);
@@ -110,4 +121,30 @@ function createPreviewMarkup({ title, author, img, plot }) {
 <img src ='${img}'/>
 <p>${plot}</p>
 </div>`;
+}
+
+// function findById(e){
+//   const bookId = e.target.parentNode.dataset.id;
+//   // по полученному id-ку находим нашу книгу (с которой мы взаимодействуем кликая на p-шку в массиве
+//   return PARSED_LOCAL_STORAGE.find(({ id }) => id === bookId);
+// }
+// findById(e);
+
+// Чтоб реализовать delete Добавляем в размутку на кнопку class ="delete" и в той же Фу renderBooksList и добавляем 
+// каждой из них слушателя, обработчик события click и колбек фу
+
+function deleteBook(e){
+
+  const books = JSON.parse(localStorage.getItem('books'))
+const bookId = e.target.parentNode.dataset.id;
+//чтоб удалить выбранный елемент мы используем метод который возвращает массив С (либо в нашем случае без) выбранным(и) элемен
+const filteredArray = books.filter(({id}) => id!==bookId)
+
+
+// Теперь нам надо Перезаписать localStorage чтоб обновить
+localStorage.setItem('books', JSON.stringify(filteredArray));
+// И вызвать фу renderBooksList которая заново созд.разметку
+
+// *важно-вызав этой фу к старой разметке добавляет новую => в фу renderBooksList надо добавить сначала очистку list.innerHTML =''
+renderBooksList()
 }
