@@ -121,8 +121,8 @@ function renderPreview(e) {
 }
 
 // 6) Фу принимает объект книги и возвращает разметку для Превьюшки
-function createPreviewMarkup({ title, author, img, plot }) {
-  return `<div>
+function createPreviewMarkup({ title, author, img, plot, id }) {
+  return `<div id ='${id}' class ="preview">
 <h2>${title}</h2>
 <p>${author}</p>
 <img src ='${img}'/>
@@ -136,12 +136,21 @@ function createPreviewMarkup({ title, author, img, plot }) {
 function deleteBook(e) {
   const books = JSON.parse(localStorage.getItem('books'));
   const bookId = e.target.parentNode.dataset.id;
+
   //10)чтоб удалить выбранный елемент мы используем метод который возвращает массив С (либо в нашем случае без) выбранным(и) элемен
   const filteredArray = books.filter(({ id }) => id !== bookId);
 
   //11) Теперь нам надо Перезаписать localStorage чтоб обновить
   localStorage.setItem('books', JSON.stringify(filteredArray));
-  //И вызвать фу renderBooksList которая заново созд.разметку
+
+  //32)Делаем проверку! Если в правой части экрана отрендерина книга которую мы сейчас удаляем - должна удалиться и превьюшка
+  // для этого добавляем id-шник (дата атрибут даже лучше бы был) и class ="preview" в разметку createPreviewMarkup
+  const preview = document.querySelector('.preview');
+  if (preview !== null && bookId === preview.id) {
+    rightDiv.innerHTML = '';
+  }
+
+  // 12)И вызвать фу renderBooksList которая заново созд.разметку
   //* 12)важно-вызав этой фу к старой разметке добавляет новую => в фу renderBooksList надо добавить сначала очистку list.innerHTML =''
   renderBooksList();
 }
@@ -174,12 +183,13 @@ function addBook() {
     //нам нужно запушить новый объект книги в localStorage для этого в JSON.parse(localStorage.getItem('books')); пушим объект
 
     const books = JSON.parse(localStorage.getItem('books'));
-
-    // const values = Object.values(newBook);
-    // if (values.some((value) => value === "")) {
-    //   alert("Fill all fields!");
-    //   return;
-    // }
+    
+    // 33) Перед тем как пушить проверяем на пустые поля тк newBook уже обработан ФУ fillObject и юзер может нафакапить
+    const values = Object.values(newBook);
+    if (values.some(value => value === '')) {
+      alert('Fill all fields!');
+      return;
+    }
 
     books.push(newBook);
     // 23) перезаписываем данные в localStorage
@@ -236,18 +246,17 @@ function editBook(e) {
   //30) Далее вызываем fillObject передаем наш book и создаем логику по Сабмиту форму и переиспользуем логику из форм сабмит
   fillObject(book);
   const form = document.querySelector('form');
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', e => {
     e.preventDefault();
-    const books = JSON.parse(localStorage.getItem('books'));
-    //31) пишем логику чтоб обновить локальное хранилище ЗАПУШИТЬ не МожеМ! потому что добавит в конец, а мы не хот.менять располож.
-    // Попробуем найти индекс текущей книги
 
     // const values = Object.values(book);
     // if (values.some(value => value === '')) {
     //   alert('Fill all fields!');
     //   return;
     // }
-
+    const books = JSON.parse(localStorage.getItem('books'));
+    //31) пишем логику чтоб обновить локальное хранилище ЗАПУШИТЬ не МожеМ! потому что добавит в конец, а мы не хот.менять располож.
+    // Попробуем найти индекс текущей книги через findIndex
     const index = books.findIndex(({ id }) => id === bookId);
     books[index] = book;
     localStorage.setItem('books', JSON.stringify(books));
@@ -257,27 +266,4 @@ function editBook(e) {
   });
 }
 
-// function editBook(event) {
-//   const books = JSON.parse(localStorage.getItem("books"));
-//   const bookID = event.target.parentNode.dataset.id;
-//   const book = books.find(({ id }) => id === bookID);
-//   const markup = createFormMarkup(book);
-//   rightDiv.innerHTML = markup;
-//   fillObject(book);
-//   const form = document.querySelector("form");
-//   form.addEventListener("submit", (event) => {
-//     event.preventDefault();
-//     const books = JSON.parse(localStorage.getItem("books"));
-//     //const values = Object.values(book);
-//     // if (values.some((value) => value === "")) {
-//     //   alert("Fill all fields!");
-//     //   return;
-//     // }
-//     const index = books.findIndex(({ id }) => id === bookID);
-//     books[index] = book;
-//     localStorage.setItem("books", JSON.stringify(books));
-//     renderBooksList();
-//     const markup = createPreviewMarkup(book);
-//     rightDiv.innerHTML = markup;
-//   });
-// }
+//32) Если в правой части экрана отрендерина книга которую мы сейчас удаляем - должна удалиться и превьюшка Решаем проблему!
