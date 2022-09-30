@@ -50,8 +50,6 @@ if (!localStorage.getItem('books')) {
   localStorage.setItem('books', JSON.stringify(initialData));
 }
 
-// * let PARSED_LOCAL_STORAGE = JSON.parse(localStorage.getItem('books'));
-
 // 1) Задача в руте (корне) создать 2 Дива и дбавить им классы
 const leftDiv = document.createElement('div');
 const rightDiv = document.createElement('div');
@@ -78,7 +76,7 @@ function renderBooksList() {
   // Фу парсит данные из локальнюхранилища, пробегается по ним map-ом, на основании каждого из объекта в массиве созд.разметку
   const markup = books
     .map(({ title, id }) => {
-      return `<li data-id ='${id}'><p class = "book-title">${title}</p>< class ="edit">Edit</><button class ="delete">Delete</button></li>`;
+      return `<li data-id ='${id}'><p class = "book-title">${title}</p><button class ="edit">Edit</button><button class ="delete">Delete</button></li>`;
     })
     .join(''); // преобразуем в строку .join('');
   // Сначала очищаем перед вставкой, чтоб не было задвоения
@@ -90,7 +88,7 @@ function renderBooksList() {
   bookTitles.forEach(el => {
     el.addEventListener('click', renderPreview);
   });
-//8)
+  //8)
   const delBtns = document.querySelectorAll('.delete');
   delBtns.forEach(el => {
     el.addEventListener('click', deleteBook);
@@ -132,7 +130,6 @@ function createPreviewMarkup({ title, author, img, plot }) {
 </div>`;
 }
 
-
 // 9)Чтоб реализовать delete Добавляем в размутку на кнопку class ="delete" и в той же Фу renderBooksList и добавляем
 // каждой из них слушателя, обработчик события click и колбек фу
 
@@ -155,21 +152,36 @@ addBtn.addEventListener('click', addBook);
 //14)
 function addBook() {
   //19)
-  const newBook = { id: `${Date.now()}`, title: ``, author: ``, img: ``, plot: ``, };
+  const newBook = {
+    id: `${Date.now()}`,
+    title: '',
+    author: '',
+    img: '',
+    plot: '',
+  };
   //16)
-  const markup = createFormMarkup();
+  const markup = createFormMarkup(newBook);
   rightDiv.innerHTML = markup;
 
   // 21)Добавляем Фу fillObject
-  fillObject(newBook)
+  fillObject(newBook);
 
   //17)после того как разметка есть мы делаем ссылку на Форму
   const form = document.querySelector('form');
   form.addEventListener('submit', e => {
     e.preventDefault();
-    // 22) далее нам нужно запушить новый объект книги в localStorage для этого в JSON.parse(localStorage.getItem('books')); пушим объект
+    // 22) далее мы можем Очистить форму! но мы хотим чтоб у нас при сабмите формы справа появлялась наша разметка li ,
+    //нам нужно запушить новый объект книги в localStorage для этого в JSON.parse(localStorage.getItem('books')); пушим объект
+
     const books = JSON.parse(localStorage.getItem('books'));
-    books.push(newBook)
+
+    // const values = Object.values(newBook);
+    // if (values.some((value) => value === "")) {
+    //   alert("Fill all fields!");
+    //   return;
+    // }
+
+    books.push(newBook);
     // 23) перезаписываем данные в localStorage
     localStorage.setItem('books', JSON.stringify(books));
     //24 перерисовываем разметку
@@ -180,6 +192,7 @@ function addBook() {
     rightDiv.innerHTML = markup;
   });
 }
+
 // 15)
 function createFormMarkup({ title, author, img, plot }) {
   return `<form>
@@ -192,7 +205,7 @@ function createFormMarkup({ title, author, img, plot }) {
 }
 
 // 18)создаем Фу внутри котор будет получать доступ к нашим инпутам и считывать значение value и записывать в св-ва нашего Объекта новой
-// книги !    19) Но где нам взять эту новую книгу? нам нужен какойто шаблончик Нью бука и этот шаблон создаем в Fu addBook 
+// книги !    19) Но где нам взять эту новую книгу? нам нужен какойто шаблончик Нью бука и этот шаблон создаем в Fu addBook
 // и в этом объекте будут такиеже ключи как в наших объектах книги только пустые
 //* Также мы не можем позволить пользователям вводить id (т.к. мы не знаем что введут) поэтому id ьудем генерировать сами!!
 // поэтому в addBook() - id --- будет id: '${Date.now()}'
@@ -200,20 +213,64 @@ function createFormMarkup({ title, author, img, plot }) {
 function fillObject(book) {
   const inputs = document.querySelectorAll('input');
   inputs.forEach(e => e.addEventListener('change', changeHandler));
-//20)
+  //20)
   function changeHandler(e) {
     //в буук с ключом ключом name записываем value с инпута
-    book[e.target.name] = e.target.value
+    book[e.target.name] = e.target.value;
   }
 }
 
-//27) хотим чтоб при кликании кнопкиedit открывалась заполненная форма соответствующими полями
-function editBook(e){
+//27) хотим чтоб при кликании кнопки edit открывалась заполненная форма с соответствующими полями
+function editBook(e) {
   const books = JSON.parse(localStorage.getItem('books'));
   const bookId = e.target.parentNode.dataset.id;
   // 28) по полученному id-ку находим нашу книгу (с которой мы взаимодействуем кликая на p-шку в массиве
   const book = books.find(({ id }) => id === bookId);
   // 29) нужно в нашу форму ( Фу createFormMarkup())) в инпут подставить value из localStorage
   // для этого добавили в Фу function createFormMarkup({ title, author, img, plot } деструктуризацию и value =`${title}` и т.д. для всех
-  createFormMarkup(book)
+  //*  но после добавления деструктуризации теперь Фу ожидает объект как параметр и в пункт 16) в createFormMarkup(добавляем!)
+  //и здесь создаем перем в котор запишем рез вызыва обновленной Фу createFormMarkup
+  const markup = createFormMarkup(book);
+  rightDiv.innerHTML = markup;
+
+  //30) Далее вызываем fillObject передаем наш book и создаем логику по Сабмиту форму и переиспользуем логику из форм сабмит
+  fillObject(book);
+  const form = document.querySelector('form');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const books = JSON.parse(localStorage.getItem('books'));
+    //31) пишем логику чтоб обновить локальное хранилище ЗАПУШИТЬ не МожеМ! потому что добавит в конец, а мы не хот.менять располож.
+    // Попробуем найти индекс текущей книги
+    const index = books.findIndex(({ id }) => id === bookId);
+    books[index] = book;
+    localStorage.setItem('books', JSON.stringify(books));
+    renderBooksList();
+    const markup = createPreviewMarkup(books);
+    rightDiv.innerHTML = markup;
+  });
 }
+
+// function editBook(event) {
+//   const books = JSON.parse(localStorage.getItem("books"));
+//   const bookID = event.target.parentNode.dataset.id;
+//   const book = books.find(({ id }) => id === bookID);
+//   const markup = createFormMarkup(book);
+//   rightDiv.innerHTML = markup;
+//   fillObject(book);
+//   const form = document.querySelector("form");
+//   form.addEventListener("submit", (event) => {
+//     event.preventDefault();
+//     const books = JSON.parse(localStorage.getItem("books"));
+//     //const values = Object.values(book);
+//     // if (values.some((value) => value === "")) {
+//     //   alert("Fill all fields!");
+//     //   return;
+//     // }
+//     const index = books.findIndex(({ id }) => id === bookID);
+//     books[index] = book;
+//     localStorage.setItem("books", JSON.stringify(books));
+//     renderBooksList();
+//     const markup = createPreviewMarkup(book);
+//     rightDiv.innerHTML = markup;
+//   });
+// }
