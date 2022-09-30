@@ -241,11 +241,18 @@ function editBook(e) {
     const books = JSON.parse(localStorage.getItem('books'));
     //31) пишем логику чтоб обновить локальное хранилище ЗАПУШИТЬ не МожеМ! потому что добавит в конец, а мы не хот.менять располож.
     // Попробуем найти индекс текущей книги
+
+    // const values = Object.values(book);
+    // if (values.some(value => value === '')) {
+    //   alert('Fill all fields!');
+    //   return;
+    // }
+
     const index = books.findIndex(({ id }) => id === bookId);
     books[index] = book;
     localStorage.setItem('books', JSON.stringify(books));
     renderBooksList();
-    const markup = createPreviewMarkup(books);
+    const markup = createPreviewMarkup(book);
     rightDiv.innerHTML = markup;
   });
 }
