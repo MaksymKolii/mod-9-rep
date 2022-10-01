@@ -1,4 +1,3 @@
-//const { join } = require("lodash");
 
 const initialData = [
   {
@@ -183,7 +182,7 @@ function addBook() {
     //нам нужно запушить новый объект книги в localStorage для этого в JSON.parse(localStorage.getItem('books')); пушим объект
 
     const books = JSON.parse(localStorage.getItem('books'));
-    
+
     // 33) Перед тем как пушить проверяем на пустые поля тк newBook уже обработан ФУ fillObject и юзер может нафакапить
     const values = Object.values(newBook);
     if (values.some(value => value === '')) {
@@ -213,7 +212,6 @@ function createFormMarkup({ title, author, img, plot }) {
   <button>Save</button>
   </form>`;
 }
-
 // 18)создаем Фу внутри котор будет получать доступ к нашим инпутам и считывать значение value и записывать в св-ва нашего Объекта новой
 // книги !    19) Но где нам взять эту новую книгу? нам нужен какойто шаблончик Нью бука и этот шаблон создаем в Fu addBook
 // и в этом объекте будут такиеже ключи как в наших объектах книги только пустые
