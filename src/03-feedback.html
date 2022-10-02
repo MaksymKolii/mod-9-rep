@@ -10,6 +10,23 @@
   </head>
   <body>
     <p><a href="index.html">Go back</a></p>
+    <style>
+      .alert {
+        opacity: 0;
+      }
+      .success {
+        padding: 20px;
+        background-color: forestgreen; /* Red */
+        color: white;
+        margin-bottom: 15px;
+        width: 270px;
+        opacity: 0;
+      }
+
+      .js-visible {
+        opacity: 1;
+      }
+    </style>
 
     <!-- <form class="feedback-form" autocomplete="off">
       <label>
@@ -22,6 +39,8 @@
       </label>
       <button type="submit">Submit</button>
     </form> -->
+
+    <p class="alert success js-alert">Операция проведена успешно</p>
 
     <script src="js/03-feedback.js" type="module"></script>
   </body>
