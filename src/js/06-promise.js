@@ -83,6 +83,9 @@ makeOrder('пирожок').then(onMakeOrderSuccess).catch(onMakeOrderError);
 //   makeOrder1('пирожок').then(onMakeOrderSuccess).catch(onMakeOrderError);
 
 const makeOrder2 = (dish, onResolved, onError) => {
+
+return Promise.resolve(`makeOrder2 Вот Ваше блин - блюдо ${dish}`)
+
     return new Promise((resolve, reject) => {
 
         const passed = Math.random() > 0.5;
