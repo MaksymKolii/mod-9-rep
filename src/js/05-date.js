@@ -122,14 +122,14 @@ class Timer {
   }
 }
 
-const timer = new Timer({
+const timer1 = new Timer({
   onTicTac: updateClockFace,
 });
 //!====================================================================================================================================
 
 
-refs.startBtn.addEventListener('click', timer.start.bind(timer));
-refs.stopBtn.addEventListener('click', timer.stop.bind(timer))
+refs.startBtn.addEventListener('click', timer1.start.bind(timer));
+refs.stopBtn.addEventListener('click', timer1.stop.bind(timer))
 
 // ?Повесил disabled или снимаю для домашки 
 // refs.startBtn.addEventListener('click', () => {
