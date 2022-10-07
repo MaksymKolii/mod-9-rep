@@ -152,13 +152,13 @@ console.log(
   'color: brown; font-size: 14px'
 );
 
-// run('Mango').then((x)=>{
-//   console.log(x);
-// })
+run('Mango').then((x)=>{
+  console.log(x);
+})
 
-// console.log(`Заезд окончен, принимаются ставки`
-// // 'color: blue; font-size: 14px'
-// );
+console.log(`Заезд окончен, принимаются ставки`
+// 'color: blue; font-size: 14px'
+);
 
 function run(horse) {
   return new Promise(resolve => {
