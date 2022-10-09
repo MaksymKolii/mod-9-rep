@@ -9,7 +9,8 @@
   </head>
   <body>
     <p><a href="index.html">Go back</a></p>
-    <style>
+    <!-- Для USERS -->
+    <!-- <style>
       body {
         margin: 16px;
         line-height: 1.5;
@@ -33,9 +34,70 @@
         margin-bottom: 16px;
       }
     </style>
-
     <button type="button" class="btn">Fetch users</button>
-    <ul class="user-list"></ul>
+    <ul class="user-list"></ul> -->
+
+    <!-- POSTS -->
+    <style>
+
+body {
+  margin: 16px;
+  line-height: 1.5;
+  color: #212121;
+  font-family: sans-serif;
+}
+
+p {
+  margin: 0;
+}
+
+.posts {
+  margin: 0;
+  list-style: none;
+  margin-bottom: 16px;
+}
+
+.posts li:not(:last-child) {
+  margin-bottom: 16px;
+}
+
+.post-title {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.post-title:first-letter {
+  text-transform: uppercase;
+}
+
+.post-body {
+  margin: 0;
+}
+.btn{
+    background-color: #30D5C8;
+}
+.alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 8px;
+  text-align: center;
+  background-color: tomato;
+  color: #fff;
+  transform: translatey(-100%);
+  transition: transform 250ms ease-in-out;
+}
+
+.alert.is-visible {
+  transform: translatey(1);
+}
+    </style>
+    <div class="alert">We're sorry, there are no more posts to load</div>
+<ul class="posts"></ul>
+<button type="button" class="btn">Fetch posts</button>
 
     <script src="js/07-alona.js" type="module"></script>
   </body>
