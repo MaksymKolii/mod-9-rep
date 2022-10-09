@@ -1,2 +1,0 @@
-!function(){var i=null,t={notification:document.querySelector(".js-alert")};function n(){t.notification.classList.remove("js-visible")}t.notification.addEventListener("click",(function(){n(),clearTimeout(i)})),t.notification.classList.add("js-visible"),i=setTimeout((function(){n(),console.log("Закрываем алерт автоматическиБ чтоб не висел")}),3e3)}();
-//# sourceMappingURL=03-feedback.849b57ed.js.map

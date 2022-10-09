@@ -1,0 +1,2 @@
+!function(){let i=null;const t={notification:document.querySelector(".js-alert")};function n(){t.notification.classList.remove("js-visible")}t.notification.addEventListener("click",(function(){n(),clearTimeout(i)})),t.notification.classList.add("js-visible"),i=setTimeout((()=>{n(),console.log("Закрываем алерт автоматическиБ чтоб не висел")}),3e3)}();
+//# sourceMappingURL=03-feedback.862c7643.js.map
