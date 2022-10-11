@@ -1,3 +1,4 @@
+import NewsApiServise from '../js/news-service_101';
 // Загружаем статьи при сабмите формы
 // Загружаем страницы при клике на кнопку "Загрузить ещё"
 // Обновляем страницу и параметры запроса
@@ -8,43 +9,51 @@
 const refs = {
   searchForm: document.querySelector('.js-search-form'),
   articlesContainer: document.querySelector('.js-articles-container'),
-  loadMoreBtn: document.querySelector('[data-action="load-more"]')
+  loadMoreBtn: document.querySelector('[data-action="load-more"]'),
 };
 
 refs.searchForm.addEventListener('submit', onSearch);
-refs.loadMoreBtn.addEventListener('click', onLoadMore)
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
-let searchQuer =''
+const newsApiService = new NewsApiServise();
+// let searchQuery =''
 
 function onSearch(e) {
   e.preventDefault();
-  const options = {
-    headers: {
-      Authorization: '6be54aba098d4ee4bc21992dc9b3c0d5',
-    },
-  };
 
-  searchQuery = e.currentTarget.elements.query.value;
-
-  const url = `https://newsapi.org/v2/everything?q=${searchQuery}&language=en&pageSize=5&page1`;
-  fetch(url, options)
-    .then(resolve => resolve.json())
-    .then(console.log());
+  //   searchQuery = e.currentTarget.elements.query.value;
+  newsApiService.query = e.currentTarget.elements.query.value;
+  //При сабмите формы свойство Page сбрасываем на 1 -ую страницу для поиска
+  newsApiService.resetPage();
+  newsApiService
+    .fetchArticles()
+    .then(renderEvents);
+    // .then(articlesData => console.log(articlesData));
 }
 
 function onLoadMore(e) {
-    e.preventDefault();
+  e.preventDefault();
 
+  newsApiService
+    .fetchArticles()
+    .then(articlesData => console.log(articlesData));
+}
 
-    const options = {
-      headers: {
-        Authorization: '6be54aba098d4ee4bc21992dc9b3c0d5',
-      },
-    };
-  
-
-    const url = `https://newsapi.org/v2/everything?q=${searchQuery}&language=en&pageSize=5&page1`;
-    fetch(url, options)
-      .then(resolve => resolve.json())
-      .then(console.log());
-  }
+function renderEvents(events) {
+  const markup = events
+    .map(({ url, urlToImage, title, author, description }) => {
+      return `
+        <li>
+        <a href="${url}" target="blank" rel="noopener noreferrer">
+        <article>
+      <img src='${urlToImage}' alt='' width='480'>
+      <h2>${title}</h2>
+      <p>Posted by:${author}</p>
+      <p>${description}</p>
+      </article>
+      </a>
+      </li>`;
+    })
+    .join('');
+  refs.articlesContainer.insertAdjacentHTML('beforeend', markup)
+}
