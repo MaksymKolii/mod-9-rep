@@ -21,11 +21,14 @@ const newsApiService = new NewsApiServise();
 function onSearch(e) {
   e.preventDefault();
 
-  //   searchQuery = e.currentTarget.elements.query.value;
+  
   newsApiService.query = e.currentTarget.elements.query.value;
   //При сабмите формы свойство Page сбрасываем на 1 -ую страницу для поиска
   newsApiService.resetPage();
-  newsApiService.fetchArticles().then(renderEvents);
+  newsApiService.fetchArticles().then( articles => {
+    
+    clearArticlescontainer();
+    renderEvents(articles)});
   // .then(articlesData => console.log(articlesData));
 }
 
@@ -36,7 +39,7 @@ function onLoadMore(e) {
 }
 
 function renderEvents(events) {
-  const markup = events
+  let markup = events
     .map(({ url, urlToImage, title, author, description }) => {
       return `
         <li>
@@ -52,4 +55,8 @@ function renderEvents(events) {
     })
     .join('');
   refs.articlesContainer.insertAdjacentHTML('beforeend', markup);
+}
+
+function clearArticlescontainer() {
+  refs.articlesContainer.innerHTML = '';
 }
