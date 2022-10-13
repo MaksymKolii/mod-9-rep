@@ -1,6 +1,7 @@
 export default class LoadMoreBtn {
   constructor({ selector, hidden = false }) {
     this.refs = this.getRefs(selector);
+    //Читается как Если hidden, тогда делаем this.hide();
     hidden && this.hide();
   }
 
@@ -25,10 +26,10 @@ export default class LoadMoreBtn {
   }
 
   show(){
-    this.refs.spiner.classList.remove('is-hidden');
+    this.refs.button.classList.remove('is-hidden');
   }
 
   hide(){
-    this.refs.spiner.classList.add('is-hidden');
+    this.refs.button.classList.add('is-hidden');
   }
 }
