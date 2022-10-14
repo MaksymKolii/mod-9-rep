@@ -13,8 +13,6 @@ export default class NewsApiService {
   }
 
   fetchArticles() {
-    // console.log(this);
-   ;
 
     const url = `${BASE_URL}/everything?q=${this.searchQuery}&language=en&pageSize=5&page=${this.page}`;
     return fetch(url, options)

@@ -74,7 +74,7 @@ function fetchArticles(){
 }
 
 function renderEvents(events) {
-  let markup = events
+  const markup = events
     .map(({ url, urlToImage, title, author, description }) => {
       return `
         <li>
