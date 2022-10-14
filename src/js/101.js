@@ -56,6 +56,7 @@ function onSearch(e) {
   fetchArticles()
   // .then(articlesData => console.log(articlesData));
 }
+
 // Это уже не надо (задваивание кода) меняеи на Фу fetchArticles
 // function onLoadMore() {
 //   loadMoreBtn.disable();
