@@ -1,39 +1,76 @@
 {
-    "books": [
-        {
-          "id": 1,
-          "title": "Последнее Королевство",
-          "author": "Бернард Корнуэлл",
-          "genres":["приключения"],
-          "rating": 8.38
-        },
-        {
-            "id": 2,
-            "title": "На берегу спокойных вод",
-            "author": "Роберт Шекли",
-            "genres":["фантастика"],
-            "rating": 8.51
-          },
-          {
-            "id": 3,
-            "title": "Пожиратель призраков",
-            "author": "Говард Лавкрафт",
-            "genres":["ужасы", "мистика"],
-            "rating": 7.94
-          },
-          {
-            "id": 4,
-            "title": "Разоблаченный проходимец",
-            "author": "Франц Кафка",
-            "genres":["классика"],
-            "rating":6.62
-          }
+  "books": [
+    {
+      "id": 1,
+      "title": "Последнее Королевство",
+      "author": "Бернард Корнуэлл",
+      "genres": [
+        "приключения"
       ],
-      "posts": [
-        { "id": 1, "title": "json-server", "author": "typicode" }
+      "rating": 8.38
+    },
+    {
+      "id": 2,
+      "title": "На берегу спокойных вод",
+      "author": "Роберт Шекли",
+      "genres": [
+        "фантастика"
       ],
-      "comments": [
-        { "id": 1, "body": "some comment", "postId": 1 }
+      "rating": 8.51
+    },
+    {
+      "id": 3,
+      "title": "Пожиратель призраков",
+      "author": "Говард Лавкрафт",
+      "genres": [
+        "ужасы",
+        "мистика"
       ],
-      "profile": { "name": "typicode" }
+      "rating": 7.94
+    },
+    {
+      "id": 4,
+      "title": "Разоблаченный проходимец",
+      "author": "Франц Кафка",
+      "genres": [
+        "классика"
+      ],
+      "rating": 6.62
+    },
+    {
+      "title": "Тестовая книга",
+      "author": "Максим",
+      "genres": [
+        "JS"
+      ],
+      "rating": 10,
+      "id": 5
+    },
+    {
+      "title": "Тестовая книга по CSS",
+      "author": "Максим",
+      "genres": [
+        "CSS"
+      ],
+      "rating": 9,
+      "id": 6
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
 }

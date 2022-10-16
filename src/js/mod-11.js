@@ -7,3 +7,7 @@
 // Далее вызываем npm run server
 
 
+//import './components/r-get'
+import './components/c-post'
+// import './components/u-patch'
+// import './components/d-delete'

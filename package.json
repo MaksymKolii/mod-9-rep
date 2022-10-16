@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel src/*.html",
     "build": "parcel build src/*.html --public-url /mod-9-rep/",
-    "server": "json-server --watch db.json"
+    "server": "json-server --watch db.json -p 4040 -d 300"
   },
   "repository": {
     "type": "git",
