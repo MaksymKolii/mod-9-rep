@@ -5,7 +5,8 @@
   "homepage": "https://MaksymKolii.github.io/mod-9-rep",
   "scripts": {
     "start": "parcel src/*.html",
-    "build": "parcel build src/*.html --public-url /mod-9-rep/"
+    "build": "parcel build src/*.html --public-url /mod-9-rep/",
+    "server": "json-server --watch db.json"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.6.0",
+    "json-server": "^0.17.0",
     "parcel": "^2.6.0",
     "parcel-reporter-clean-dist": "^1.0.4",
     "posthtml-include": "^1.7.4"
