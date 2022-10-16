@@ -8,6 +8,8 @@
 
 
 //import './components/r-get'
-import './components/c-post'
+//import './components/c-post'
 // import './components/u-patch'
-// import './components/d-delete'
+ //import './components/d-delete'
+
+ // http://fecore.net.ua/books/m5ph3r-javascript/module-82/scope.html#hoisting
