@@ -114,6 +114,18 @@
       ],
       "rating": 9.9,
       "id": 14
+    },
+    {
+      "id": 15
+    },
+    {
+      "title": " по CSS",
+      "author": "МаксимKKK",
+      "genres": [
+        "CSS"
+      ],
+      "rating": 9.01,
+      "id": 16
     }
   ],
   "posts": [
