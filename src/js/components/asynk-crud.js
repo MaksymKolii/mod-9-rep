@@ -64,6 +64,6 @@ async function updateBook(update, bookId) {
     body: JSON.stringify(update),
   };
   const responce = await fetch(`${BASE_URL}/books/${bookId}`, options);
-  const updatrdbook = await responce.json();
-  return updateBook;
+  const updatedBook = await responce.json();
+  return updatedBook;
 }
