@@ -1,5 +1,7 @@
 import LoadMoreBtn from '../js/components/101-load-more-btn';
 import NewsApiServise from '../js/news-service_101';
+
+
 // Загружаем статьи при сабмите формы
 // Загружаем страницы при клике на кнопку "Загрузить ещё"
 // Обновляем страницу и параметры запроса
