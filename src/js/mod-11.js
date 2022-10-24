@@ -8,47 +8,50 @@
 //import './components/c-post'
 // import './components/u-patch'
 //import './components/d-delete'
-import './components/asynk-crud'
+//import './components/asynk-crud'
 
 // http://fecore.net.ua/books/m5ph3r-javascript/module-82/scope.html#hoisting
 
-function getFruit(name) {
-  const fruits = {
-    apple: '🍎',
-    citrus: '🍋',
-    banana: '🍌',
-    grapes: '🍇',
-  };
+// function getFruit(name) {
+//   const fruits = {
+//     apple: '🍎',
+//     citrus: '🍋',
+//     banana: '🍌',
+//     grapes: '🍇',
+//   };
 
-  return new Promise((resolve, reject) =>
-    setTimeout(() => resolve(fruits[name]), 500)
-  );
-}
-async function aMakeSmoothie() {
-  try {
-    console.time('aMakeSmoothie');
+//   return new Promise((resolve, reject) =>
+//     setTimeout(() => resolve(fruits[name]), 500)
+//   );
+// }
+// async function aMakeSmoothie() {
+//   try {
+//     console.time('aMakeSmoothie');
 
-    const grapes = getFruit('grapes')
-    const citrus = getFruit('citrus')
-    const apple = getFruit('apple')
+//     const grapes = getFruit('grapes')
+//     const citrus = getFruit('citrus')
+//     const apple = getFruit('apple')
 
-    const fruits = await Promise.all([grapes,citrus, apple])
-    console.log(fruits);
-    console.timeEnd('aMakeSmoothie')
-    return fruits
+//     const fruits = await Promise.all([grapes,citrus, apple])
+//     console.log(fruits);
+//     console.timeEnd('aMakeSmoothie')
+//     return fruits
 
-    // const grapes = await getFruit('grapes');
-    // const citrus = await getFruit('citrus');
-    // const apple = await getFruit('apple');
-    // console.log(grapes);
-    // console.log(citrus);
-    // console.log(apple);
-    // console.timeEnd('aMakeSmoothie');
+//     // const grapes = await getFruit('grapes');
+//     // const citrus = await getFruit('citrus');
+//     // const apple = await getFruit('apple');
+//     // console.log(grapes);
+//     // console.log(citrus);
+//     // console.log(apple);
+//     // console.timeEnd('aMakeSmoothie');
 
 
-  } catch (error) {
-    console.log('Ошибка');
-  }
-}
+//   } catch (error) {
+//     console.log('Ошибка');
+//   }
+// }
 
-aMakeSmoothie().then(data =>console.log(data))
+// aMakeSmoothie().then(data =>console.log(data))
+
+//*  Занятие в Аленой =========================================================================================================================
+const fetchBtn = document.querySelector('.fetch')
