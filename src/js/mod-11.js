@@ -55,3 +55,10 @@
 
 //*  Занятие в Аленой =========================================================================================================================
 const fetchBtn = document.querySelector('.fetch')
+const list  = document.querySelector('.list')
+const addBtn = document.querySelector('.add')
+const formwrapper = document.querySelector('.form-wrapper')
+
+addBtn.style.display ='none'
+const URL ='http://localhost:4040'
+fetchBtn.addEventListener('click',()=>{})
