@@ -1,8 +1,10 @@
-// Т.к. мы установили json-server  в документации написано запустить json-server --watch db.json
-// мы в package.jsone в поле "scripts"  создадим элемент например с именем "server" и пропишем то что хотят json-server --watch db.json
-// Итого будет в package.jsone ---   "server":"json-server --watch db.json"
-
-// Далее вызываем npm run server
+//? имитируем базу данных (локальную) испрльзуя https://github.com/typicode/json-server
+//* 1  npm i --save-dev json-server
+//* 2 В корне проекта создали файл с данными db.json
+// *Т.к. мы установили json-server  в документации написано запустить json-server --watch db.json
+//*  мы в package.jsone в поле "scripts"  создадим элемент например с именем "server" и пропишем то что хотят json-server --watch db.json
+//* Итого будет в package.jsone ---   "server":"json-server --watch db.json"
+// * Далее вызываем npm run server
 
 //import './components/r-get'
 //import './components/c-post'
