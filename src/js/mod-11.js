@@ -160,40 +160,38 @@ function deleteBook(e) {
     .catch(error => console.log('Error:', error));
 }
 
+function editBook(e) {
+  const id = e.target.parentNode.id;
 
-function editBook(e){
-    const id = e.target.parentNode.id;
+  const title = e.target.parentNode.querySelector('.title').textContent;
+  console.log(title);
+  const author = e.target.parentNode.querySelector('.author').textContent;
+  const rating = e.target.parentNode.querySelector('.rating').textContent;
 
-    const title = e.target.parentNode.querySelector('.title').textContent;
-    console.log(title);
-     const author = e.target.parentNode.querySelector('.author').textContent;
-    const rating = e.target.parentNode.querySelector('.rating').textContent;
-  
-    formWrapper.innerHTML = createFormMarkup(title, author, rating);
+  formWrapper.innerHTML = createFormMarkup(title, author, rating);
 
-    const form = document.querySelector('form');
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const book = {
-        title: e.target.elements.title.value,
-        author: e.target.elements.author.value,
-        rating: e.target.elements.rating.value,
-      };
-  
-      const options = {
-        method: 'PATCH',
-        body: JSON.stringify(book),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      };
-  
-      fetch(`${BASE_URL}/books/${id}`, options)
-        .then(() => {
-          getBooks();
-          form.innerHTML = '';
-        })
-        .catch(error => console.log(error));
-    });
+  const form = document.querySelector('form');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const book = {
+      title: e.target.elements.title.value,
+      author: e.target.elements.author.value,
+      rating: e.target.elements.rating.value,
+    };
 
+    const options = {
+      method: 'PATCH',
+      body: JSON.stringify(book),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    };
+
+    fetch(`${BASE_URL}/books/${id}`, options)
+      .then(() => {
+        getBooks();
+        form.innerHTML = '';
+      })
+      .catch(error => console.log(error));
+  });
 }
